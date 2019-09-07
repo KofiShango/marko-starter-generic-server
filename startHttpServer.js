@@ -38,6 +38,13 @@ module.exports = (httpServer) => {
     let server;
     if (ssl) {
       server = require('https').createServer(httpsOptions);
+      // redirect http
+      // todo remove http option all together
+      require('http')
+        .createServer()
+        .get('*', (req, res) => {
+          res.redirect('https://' + req.headers.host + req.url);
+        });
     } else {
       server = require('http').createServer();
     }
