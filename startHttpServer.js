@@ -40,11 +40,11 @@ module.exports = (httpServer) => {
       server = require('https').createServer(httpsOptions);
       // redirect http
       // todo remove http option all together
-      require('http')
-        .createServer()
-        .get('*', (req, res) => {
-          res.redirect('https://' + req.headers.host + req.url);
-        });
+      var http = require('http');
+      http.createServer(function (req, res) {
+        res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+        res.end();
+      }).listen(8888);
     } else {
       server = require('http').createServer();
     }
